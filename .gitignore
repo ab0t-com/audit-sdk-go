@@ -1,0 +1,74 @@
+# ── secrets / credentials — NEVER publish ────────────────────────────────────
+# This SDK carries an audit service X-API-Key at runtime; no credential may land in git.
+*.pem
+*.key
+*.p12
+*.crt
+.env
+.env.*
+!.env.example
+token
+tokens.json
+credentials.json
+service-account*.json
+.netrc
+
+# ── internal / not for public consumption ────────────────────────────────────
+# Internal planning artefacts live in the private repos that consume this SDK.
+tickets/
+ticket/
+_internal/
+_private/
+*_INTERNAL.md
+*_PRIVATE.md
+.private/
+.archive/
+scratch/
+notes/
+
+# ── Go build / test output ───────────────────────────────────────────────────
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.a
+*.test
+*.out
+*.prof
+*.pprof
+coverage.out
+coverage.html
+cover.out
+/bin/
+/dist/
+/release/
+# vendor/ is intentionally NOT ignored: consumers may vendor this module.
+go.work
+go.work.sum
+
+# ── gitleaks artifacts ───────────────────────────────────────────────────────
+gitleaks-report.json
+gitleaks-report.sarif
+
+# ── local tooling / agent scratch ────────────────────────────────────────────
+.claude/
+.aider*
+.direnv/
+.envrc
+*.local
+*.orig
+*.rej
+
+# ── editor / OS noise ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+*.log

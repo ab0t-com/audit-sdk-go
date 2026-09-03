@@ -1,0 +1,26 @@
+# gitleaks config for audit-sdk-go (public repo).
+# Extends the built-in ruleset; adds an allowlist for the header NAME literals
+# this SDK unavoidably contains ("X-API-Key", "APIKey" struct fields, etc.) so
+# they are never mistaken for a leaked secret. No real credential may ever land
+# in this repo — the runtime API key is supplied by the consumer at construction
+# time and is not part of the source.
+
+title = "audit-sdk-go gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Header/field NAME literals and test fixtures — not secrets"
+# Paths that only contain synthetic/test values.
+paths = [
+  '''.*_test\.go$''',
+]
+# Literal strings that are header/field NAMES, not secret VALUES.
+regexes = [
+  '''X-API-Key''',
+  '''APIKey''',
+  '''api_?key''',
+  '''AUDIT_SERVICE_URL''',
+  '''AUDIT_SERVICE_API_KEY''',
+]

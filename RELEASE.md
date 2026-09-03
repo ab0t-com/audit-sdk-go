@@ -8,9 +8,9 @@ and gate the public-safety checks so a mistake fails the release instead of ship
 ## Invariants (why each gate exists)
 1. **No secrets.** `gitleaks` (config `.gitleaks.toml`) must find zero leaks. The runtime API key is
    supplied by the CONSUMER at construction — it is never in source.
-2. **No internal references.** No `connectgo` / internal service names, no monorepo paths
-   (`intergration/output/...`), no internal ticket IDs, no internal skill names, no `audit-ingressd`
-   implementation paths. The lib documents the *contract*, never internal internals.
+2. **No internal references.** No internal service/codenames, no private monorepo paths, no internal
+   ticket IDs, no internal skill names, no internal implementation-file paths. The lib documents the
+   *public contract*, never internal internals. (`release.sh` enforces this with a scan.)
 3. **Stdlib-only.** `go.mod` has no `require` block and there is no `go.sum` — the module pulls in
    zero transitive deps, so a consumer inherits nothing. A release must preserve this.
 4. **Green.** `go build`, `go vet`, `gofmt -l` (empty), `go test -race` all pass.
@@ -40,12 +40,12 @@ Consumers pin the module from the proxy (no `replace`):
 ```
 require github.com/ab0t-com/audit-sdk-go vX.Y.Z
 ```
-Bump the version in the consumer's `go.mod` and `go mod tidy`. (connectgo already consumes v0.1.0
-from the proxy — no local replace.)
+Bump the version in the consumer's `go.mod` and `go mod tidy`. (The reference consumer already
+pulls v0.1.0 from the proxy — no local replace.)
 
 ## Public-safety checklist (run before ANY push, enforced by release.sh + CI)
 - [ ] `gitleaks detect --no-git --config .gitleaks.toml` → no leaks
-- [ ] internal-ref scan empty (connectgo / intergration / audit-ingressd / internal paths / ticket IDs)
+- [ ] internal-ref scan empty (no internal service/codenames, private paths, or ticket IDs)
 - [ ] `.gitignore` excludes creds, `.env*`, `tickets/`, `_internal/`, build output
 - [ ] no `go.sum` / no `require` block (stdlib-only preserved)
 - [ ] `version.go` == the tag · CHANGELOG note added below
